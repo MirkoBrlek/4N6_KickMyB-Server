@@ -33,6 +33,17 @@ public class ControllerTask {
         return "";
     }
 
+    @PostMapping(value = "/api/delete", produces = "text/plain")
+    public @ResponseBody String deleteOne(Long id) throws ServiceTask.Unauthorized {
+        System.out.println("KICKB SERVER : Delete a task : -ID: " + id);
+        ConfigHTTP.attenteArticifielle();
+
+        MUser user = currentUser();
+        serviceTask.deleteOne(id, user);
+
+        return "";
+    }
+
     @GetMapping(value = "/api/progress/{taskID}/{value}", produces = "text/plain")
     public @ResponseBody String updateProgress(@PathVariable long taskID, @PathVariable int value) {
         System.out.println("KICKB SERVER : Progress for task : " + taskID + " @" + value);

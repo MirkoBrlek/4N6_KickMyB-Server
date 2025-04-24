@@ -7,6 +7,7 @@ import org.kickmyb.transfer.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -79,12 +80,24 @@ public class ServiceTaskImpl implements ServiceTask {
     }
 
     @Override
+    public void deleteOne(Long id, MUser user) throws Unauthorized {
+        MTask task = repo.findById(id).get();
+
+        if(!user.tasks.contains(task)){
+            throw new Unauthorized();
+        }
+
+        repo.delete(task);
+
+    }
+
+    @Override
     public void updateProgress(long taskID, int value) {
         MTask element = repo.findById(taskID).get();
         // TODO validate value is between 0 and 100
         MProgressEvent pe= new MProgressEvent();
         pe.resultPercentage = value;
-        pe.completed = value ==100;
+        pe.completed = value == 100;
         pe.timestamp = DateTime.now().toDate();
         repoProgressEvent.save(pe);
         element.events.add(pe);
