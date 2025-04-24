@@ -80,15 +80,15 @@ public class ServiceTaskImpl implements ServiceTask {
     }
 
     @Override
-    public void deleteOne(Long id, MUser user) throws Unauthorized {
-        MTask task = repo.findById(id).get();
+    public void deleteOne(Long id, MUser user) throws Unauthorized, DoesntExist {
+        MTask task = repo.findById(id)
+                .orElseThrow(() -> new DoesntExist());
 
         if(!user.tasks.contains(task)){
             throw new Unauthorized();
         }
 
         repo.delete(task);
-
     }
 
     @Override

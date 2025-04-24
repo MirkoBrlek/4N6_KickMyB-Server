@@ -34,7 +34,7 @@ public class ControllerTask {
     }
 
     @PostMapping(value = "/api/delete", produces = "text/plain")
-    public @ResponseBody String deleteOne(Long id) throws ServiceTask.Unauthorized {
+    public @ResponseBody String deleteOne(Long id) throws ServiceTask.Unauthorized, ServiceTask.DoesntExist {
         System.out.println("KICKB SERVER : Delete a task : -ID: " + id);
         ConfigHTTP.attenteArticifielle();
 
