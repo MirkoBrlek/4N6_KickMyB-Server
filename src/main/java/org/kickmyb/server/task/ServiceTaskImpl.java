@@ -7,6 +7,7 @@ import org.kickmyb.transfer.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ArrayList;
@@ -81,10 +82,11 @@ public class ServiceTaskImpl implements ServiceTask {
 
     @Override
     public void deleteOne(Long id, MUser user) throws Unauthorized, DoesntExist {
-        MTask task = repo.findById(id)
-                .orElseThrow(() -> new DoesntExist());
 
-        if(!user.tasks.contains(task)){
+        MTask task = repo.findById(id)
+                .orElseThrow(DoesntExist::new);
+
+        if (!user.tasks.contains(task)) {
             throw new Unauthorized();
         }
 
