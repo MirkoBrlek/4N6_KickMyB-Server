@@ -14,10 +14,10 @@ public interface ServiceTask {
     class DoesntExist extends Exception {}
 
     // entity handling
-    TaskDetailResponse detail(Long id, MUser user);
+    TaskDetailResponse detail(Long id, MUser user) throws Unauthorized;
     void addOne(AddTaskRequest req, MUser user) throws Existing, Empty, TooShort;
     void deleteOne(Long id, MUser user) throws Unauthorized, DoesntExist;
-    void updateProgress(long taskID, int value);
+    void updateProgress(long taskID, int value, MUser user) throws Unauthorized;
     List<HomeItemResponse> home(Long userID);
     TaskDetailPhotoResponse detailPhoto(Long id, MUser user);
     List<HomeItemPhotoResponse> homePhoto(Long userID);

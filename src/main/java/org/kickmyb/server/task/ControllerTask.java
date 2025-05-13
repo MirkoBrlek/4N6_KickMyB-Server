@@ -47,8 +47,15 @@ public class ControllerTask {
     @GetMapping(value = "/api/progress/{taskID}/{value}", produces = "text/plain")
     public @ResponseBody String updateProgress(@PathVariable long taskID, @PathVariable int value) {
         System.out.println("KICKB SERVER : Progress for task : " + taskID + " @" + value);
+        MUser user = currentUser();
         ConfigHTTP.attenteArticifielle();
-        serviceTask.updateProgress(taskID, value);
+        try {
+            serviceTask.updateProgress(taskID, value, user);
+        }
+        catch (Exception e) {
+            return e.getMessage();
+        }
+
         return "";
     }
 
@@ -65,7 +72,11 @@ public class ControllerTask {
         System.out.println("KICKB SERVER : Detail  with cookie ");
         ConfigHTTP.attenteArticifielle();
         MUser user = currentUser();
+        try {
         return serviceTask.detail(id, user);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**

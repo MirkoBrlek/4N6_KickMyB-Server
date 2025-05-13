@@ -33,9 +33,12 @@ public class ServiceTaskImpl implements ServiceTask {
     }
 
     @Override
-    public TaskDetailResponse detail(Long id, MUser user) {
+    public TaskDetailResponse detail(Long id, MUser user) throws Unauthorized {
         //MTask element = user.tasks.stream().filter(elt -> elt.id == id).findFirst().get();
         MTask element = repo.findById(id).get();
+        if(!user.tasks.contains(element)) {
+            throw new Unauthorized();
+        }
         TaskDetailResponse response = new TaskDetailResponse();
         response.name = element.name;
         response.id = element.id;
@@ -89,13 +92,19 @@ public class ServiceTaskImpl implements ServiceTask {
         if (!user.tasks.contains(task)) {
             throw new Unauthorized();
         }
+        user.tasks.remove(task);
+        repoUser.save(user);
 
-        repo.delete(task);
+        repo.deleteById(id);
+
     }
 
     @Override
-    public void updateProgress(long taskID, int value) {
+    public void updateProgress(long taskID, int value, MUser user) throws Unauthorized {
         MTask element = repo.findById(taskID).get();
+        if(!user.tasks.contains(element)) {
+            throw new Unauthorized();
+        }
         // TODO validate value is between 0 and 100
         MProgressEvent pe= new MProgressEvent();
         pe.resultPercentage = value;
